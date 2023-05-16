@@ -6,6 +6,7 @@ import PySimpleGUI as sg
 import pandas
 import pyperclip
 import sqlite3
+import json
 
 db = sqlite3.connect(":memory:")
 sg.theme("DarkBrown3")
@@ -63,10 +64,10 @@ def copy():
 def setup_db():
     global db
     excel_pass = os.path.join(os.path.dirname(sys.argv[0]),'./excel/index.xlsx')
-    work_sheet = pandas.read_excel(excel_pass)
+    data = json.load(open(os.path.join(os.path.dirname(sys.argv[0]), './data/data.json'),'r',encoding="utf-8_sig"))
     db.execute("CREATE TABLE credit( character text, URL text, credit text)")
-    for row in work_sheet.values:
-        db.execute(f"INSERT INTO credit (character,URL,credit) values ('{row[0]}', '{row[1]}' , '{row[2]}')")
+    for row in data:
+        db.execute(f"INSERT INTO credit (character,URL,credit) values ('{row['name']}', '{row['URL']}' , '{row['credit']}')")
     db.commit()
 
 
@@ -82,7 +83,7 @@ def get_value(name):
     text = f"{voice}"
     window["text"].update(result[0][0])
     window["text1"].update(text)
-    if not voice_copyright == "なし":
+    if not voice_copyright == "":
         # そのまま貼るとエラー
         copyright_text = f"{voice_copyright}"
         window["copyright_key"].update(copyright_text)
