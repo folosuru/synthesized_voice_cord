@@ -24,7 +24,9 @@ window = sg.Window(title='合成音声規約検索',
                    layout=layout,
                    font=('BIZ UDPゴシック',16),
                    finalize=True,
-                   resizable=True,)
+                   resizable=True,
+                   keep_on_top=True,
+                   )
 
 #エクセルにまとめてあるurlを表示
 def excel(value):
@@ -97,7 +99,7 @@ def get_value(name):
     result_list = []
     for item in result:
         result_list.append(item[0])
-    window["search_result"].update(values=result_list)
+    window["search_result"].update(values=result_list, value=result_list[0])
     if len(result) != 0:
         display_credit(result[0][0])
 
